@@ -4,7 +4,7 @@ import numpy as np
 import xgboost as xgb
 from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
-
+from main import create_features
 # Your existing functions (create_features, etc.)
 
 st.title("Energy Consumption Forecast")
