@@ -77,13 +77,14 @@ async def train_model():
     reg = xgb.XGBRegressor(
         base_score=0.5,
         booster='gbtree',
-        n_estimators=1000,
+        n_estimators=5000,
         early_stopping_rounds=50,
         objective='reg:squarederror',
         max_depth=3,
         learning_rate=0.05,
     )
     reg.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_val, y_val)], verbose=100)
+    print("Training is finished :)")
     model = reg
     return {"status": "Model trained successfully"}
 
