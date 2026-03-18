@@ -9,7 +9,28 @@ import math
 import os
 from typing import Optional
 
+from fastapi import UploadFile, File
+from fastapi.staticfiles import StaticFiles
+import shutil
+
 app = FastAPI()
+
+# Mount static folder for HTML/JS/CSS
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Serve the HTML page
+@app.get("/")
+async def read_root():
+    return FileResponse("static/index.html")
+
+# Handle file upload
+@app.post("/upload")
+async def upload_csv(file: UploadFile = File(...)):
+    with open(f"Data/{file.filename}", "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    # Train the model after upload
+    await train_model()
+    return {"message": "File uploaded and model trained!"}
 
 # --- Your existing functions ---
 def create_features(df: pl.DataFrame) -> pl.DataFrame:

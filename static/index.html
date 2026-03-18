@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Energy Consumption Forecast</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        #results { margin-top: 20px; }
+        #file-upload { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Energy Consumption Forecast</h1>
+    <div id="file-upload">
+        <input type="file" id="csv-file" accept=".csv" />
+        <button onclick="uploadFile()">Upload & Train</button>
+    </div>
+    <div>
+        <button onclick="predict()">Predict</button>
+        <button onclick="visualize()">Visualize</button>
+    </div>
+    <div id="results"></div>
+
+    <script>
+        async function uploadFile() {
+            const fileInput = document.getElementById('csv-file');
+            const file = fileInput.files[0];
+            if (!file) return alert("Please select a file!");
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById('results').innerHTML = `<p>${result.message}</p>`;
+        }
+
+        async function predict() {
+            const response = await fetch('/predict');
+            const result = await response.json();
+            document.getElementById('results').innerHTML = `
+                <h3>Prediction Results</h3>
+                <p>RMSE: ${result.rmse.toFixed(2)}</p>
+                <p>MAE: ${result.mae.toFixed(2)}</p>
+                <p>MAPE: ${(result.mape * 100).toFixed(2)}%</p>
+            `;
+        }
+
+        async function visualize() {
+            const response = await fetch('/visualize');
+            const result = await response.json();
+            let imagesHTML = '';
+            result.files.forEach(file => {
+                imagesHTML += `<img src="/download/${file}" width="800" /><br/>`;
+            });
+            document.getElementById('results').innerHTML = `
+                <h3>Visualizations</h3>
+                ${imagesHTML}
+            `;
+        }
+    </script>
+</body>
+</html>
