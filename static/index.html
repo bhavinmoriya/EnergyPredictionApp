@@ -1,31 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Energy Consumption Forecast</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Forecast App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
-        #results { margin-top: 20px; }
-        #file-upload { margin-bottom: 20px; }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .btn {
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
-<body>
-    <h1>Energy Consumption Forecast</h1>
-    <div id="file-upload">
-        <input type="file" id="csv-file" accept=".csv" />
-        <button onclick="uploadFile()">Upload & Train</button>
+<body class="min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Energy Consumption Forecast 🌍⚡</h1>
+            <p class="text-lg text-gray-600">
+                Upload your CSV, click a button, and get instant forecasts—no coding required!
+            </p>
+        </div>
+
+        <div class="card p-8 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-6">1. Upload Your Data</h2>
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+                <input
+                    type="file"
+                    id="csv-file"
+                    accept=".csv"
+                    class="block w-full sm:w-auto text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-md file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100"
+                >
+                <button
+                    onclick="uploadFile()"
+                    class="btn bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-2 px-6 rounded-lg font-medium shadow-lg"
+                >
+                    Upload & Train
+                </button>
+            </div>
+        </div>
+
+        <div class="card p-8 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-6">2. Generate Results</h2>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <button
+                    onclick="predict()"
+                    class="btn bg-gradient-to-r from-green-400 to-green-600 text-white py-2 px-6 rounded-lg font-medium shadow-lg"
+                >
+                    Predict
+                </button>
+                <button
+                    onclick="visualize()"
+                    class="btn bg-gradient-to-r from-purple-500 to-pink-600 text-white py-2 px-6 rounded-lg font-medium shadow-lg"
+                >
+                    Visualize
+                </button>
+            </div>
+        </div>
+
+        <div class="card p-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-6">3. Results</h2>
+            <div id="results" class="min-h-[300px] bg-white rounded-lg p-6">
+                <p class="text-gray-500 text-center py-12">Your results will appear here.</p>
+            </div>
+        </div>
     </div>
-    <div>
-        <button onclick="predict()">Predict</button>
-        <button onclick="visualize()">Visualize</button>
-    </div>
-    <div id="results"></div>
 
     <script>
         async function uploadFile() {
             const fileInput = document.getElementById('csv-file');
             const file = fileInput.files[0];
-            if (!file) return alert("Please select a file!");
+            if (!file) return alert("Please select a CSV file!");
 
             const formData = new FormData();
             formData.append('file', file);
@@ -35,17 +98,34 @@
                 body: formData
             });
             const result = await response.json();
-            document.getElementById('results').innerHTML = `<p>${result.message}</p>`;
+            document.getElementById('results').innerHTML = `
+                <div class="text-center p-4 bg-green-50 rounded-lg">
+                    <p class="text-green-700 font-medium">${result.message}</p>
+                </div>
+            `;
         }
 
         async function predict() {
             const response = await fetch('/predict');
             const result = await response.json();
             document.getElementById('results').innerHTML = `
-                <h3>Prediction Results</h3>
-                <p>RMSE: ${result.rmse.toFixed(2)}</p>
-                <p>MAE: ${result.mae.toFixed(2)}</p>
-                <p>MAPE: ${(result.mape * 100).toFixed(2)}%</p>
+                <div class="bg-blue-50 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold text-blue-800 mb-4">Prediction Results</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-gray-600">RMSE</p>
+                            <p class="text-2xl font-bold text-blue-600">${result.rmse.toFixed(2)}</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-gray-600">MAE</p>
+                            <p class="text-2xl font-bold text-blue-600">${result.mae.toFixed(2)}</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-gray-600">MAPE</p>
+                            <p class="text-2xl font-bold text-blue-600">${(result.mape * 100).toFixed(2)}%</p>
+                        </div>
+                    </div>
+                </div>
             `;
         }
 
@@ -54,11 +134,18 @@
             const result = await response.json();
             let imagesHTML = '';
             result.files.forEach(file => {
-                imagesHTML += `<img src="/download/${file}" width="800" /><br/>`;
+                imagesHTML += `
+                    <div class="mb-6">
+                        <h4 class="text-lg font-medium mb-2 text-gray-700">${file.replace('.png', '').replace('_', ' ')}</h4>
+                        <img src="/download/${file}" class="w-full rounded-lg shadow-lg" />
+                    </div>
+                `;
             });
             document.getElementById('results').innerHTML = `
-                <h3>Visualizations</h3>
-                ${imagesHTML}
+                <div class="bg-purple-50 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold text-purple-800 mb-6">Visualizations</h3>
+                    ${imagesHTML}
+                </div>
             `;
         }
     </script>
