@@ -64,7 +64,7 @@ Deploying your FastAPI + Streamlit/HTML app to **Render.com** is straightforward
 - **Environment**: Python 3.
 - **Build Command**:
   ```bash
-  pip install -r requirements.txt
+  uv sync --frozen && uv cache prune --ci
   ```
 - **Start Command**:
   ```bash
