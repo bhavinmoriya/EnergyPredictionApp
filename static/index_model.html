@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Forecast App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .btn {
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header and Introduction -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Energy Consumption Forecast 🌍⚡</h1>
+            <p class="text-lg text-gray-600">
+                Get instant energy consumption forecasts—no coding required!
+            </p>
+        </div>
+
+        <!-- Pre-trained Model Message -->
+        <div class="card p-8 mb-8">
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded-lg">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-blue-700">
+                            To make predictions fast and easy, we’ve pre-trained a model on the <strong>PJME_hourly.csv</strong> dataset.
+                            Download the sample dataset below, upload it, and see the results instantly!
+                        </p>
+                        <a
+                            href="https://raw.githubusercontent.com/your-repo/PJME_hourly.csv"
+                            download="PJME_hourly.csv"
+                            class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg font-medium mt-2 transition"
+                        >
+                            📥 Download Sample Dataset
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dataset Preview -->
+            <div class="overflow-x-auto mt-4 mb-6">
+                <p class="text-sm text-gray-600 mb-2">Preview of the dataset:</p>
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="py-2 px-4 border-b">Datetime</th>
+                            <th class="py-2 px-4 border-b">PJME_MW</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="py-2 px-4 border-b">2002-01-01 01:00:00</td>
+                            <td class="py-2 px-4 border-b">35000</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 px-4 border-b">2002-01-01 02:00:00</td>
+                            <td class="py-2 px-4 border-b">34500</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- How It Works -->
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">How It Works</h3>
+                <div class="flex flex-col sm:flex-row justify-around items-center gap-4">
+                    <div class="text-center">
+                        <div class="bg-blue-100 p-4 rounded-full mb-2">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                        </div>
+                        <p class="text-sm text-gray-600">1. Download the sample dataset</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="bg-green-100 p-4 rounded-full mb-2">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                        </div>
+                        <p class="text-sm text-gray-600">2. Upload the dataset</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="bg-purple-100 p-4 rounded-full mb-2">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-sm text-gray-600">3. Get predictions</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+            <h2 class="text-2xl font-semibold text-gray-700 mt-8 mb-6">1. Upload Your Data</h2>
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+                <input
+                    type="file"
+                    id="csv-file"
+                    accept=".csv"
+                    class="block w-full sm:w-auto text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-md file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-blue-50 file:text-blue-700
+                        hover:file:bg-blue-100"
+                >
+                <button
+                    onclick="uploadFile()"
+                    class="btn bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-2 px-6 rounded-lg font-medium shadow-lg"
+                >
+                    📁 Upload Dataset
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="card p-8 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-6">2. Generate Results</h2>
+            <div class="flex flex-wrap gap-4 justify-center">
+                <button
+                    onclick="predict()"
+                    class="btn bg-gradient-to-r from-green-400 to-green-600 text-white py-2 px-6 rounded-lg font-medium shadow-lg"
+                >
+                    📊 Predict
+                </button>
+                <button
+                    onclick="visualize()"
+                    class="btn bg-gradient-to-r from-purple-500 to-pink-600 text-white py-2 px-6 rounded-lg font-medium shadow-lg"
+                >
+                    📈 Visualize
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Output -->
+        <div class="card p-8 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-6">3. Results</h2>
+            <div id="results" class="min-h-[300px] bg-white rounded-lg p-6">
+                <p class="text-gray-500 text-center py-12">Your results will appear here.</p>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="card p-8 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-6">❓ Frequently Asked Questions</h2>
+            <div class="space-y-4">
+                <div class="border-b border-gray-200 pb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Why can’t I train my own model?</h3>
+                    <p class="text-gray-600">
+                        Due to compute restrictions on this demo, we’ve pre-trained the model for you.
+                        For custom training, you can <a href="mailto:bhavinmoriya58@gmail.com" class="text-blue-600 hover:underline">contact us</a>
+                        or deploy the app on your own server!
+                    </p>
+                </div>
+                <div class="border-b border-gray-200 pb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Can I use my own dataset?</h3>
+                    <p class="text-gray-600">
+                        Currently, the app is optimized for the <strong>PJME_hourly.csv</strong> dataset.
+                        Stay tuned for updates, or reach out if you’d like to collaborate on adding support for custom datasets!
+                    </p>
+                </div>
+                <div class="border-b border-gray-200 pb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">How accurate are the predictions?</h3>
+                    <p class="text-gray-600">
+                        The model achieves an RMSE of ~351 MW on the test set, which is typical for energy consumption forecasts.
+                        Accuracy depends on the quality and recency of the input data.
+                    </p>
+                </div>
+                <div class="pb-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Can I deploy this app myself?</h3>
+                    <p class="text-gray-600">
+                        Yes! The app is open-source. Check out the
+                        <a href="https://github.com/bhavinmoriya/EnergyPredictionApp" class="text-blue-600 hover:underline">GitHub repository</a>
+                        for instructions on deploying it to platforms like Render, Heroku, or AWS.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function uploadFile() {
+            const fileInput = document.getElementById('csv-file');
+            const file = fileInput.files[0];
+            if (!file) return alert("Please select the PJME_hourly.csv file!");
+            if (!file.name.includes("PJME_hourly")) {
+                return alert("Please upload the correct dataset (PJME_hourly.csv).");
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById('results').innerHTML = `
+                <div class="text-center p-4 bg-green-50 rounded-lg">
+                    <p class="text-green-700 font-medium">${result.message}</p>
+                </div>
+            `;
+        }
+
+        async function predict() {
+            const response = await fetch('/predict');
+            const result = await response.json();
+            document.getElementById('results').innerHTML = `
+                <div class="bg-blue-50 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold text-blue-800 mb-4">Prediction Results</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-gray-600">RMSE</p>
+                            <p class="text-2xl font-bold text-blue-600">${result.rmse.toFixed(2)}</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-gray-600">MAE</p>
+                            <p class="text-2xl font-bold text-blue-600">${result.mae.toFixed(2)}</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <p class="text-gray-600">MAPE</p>
+                            <p class="text-2xl font-bold text-blue-600">${(result.mape * 100).toFixed(2)}%</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function visualize() {
+            const response = await fetch('/visualize');
+            const result = await response.json();
+            let imagesHTML = '';
+            result.files.forEach(file => {
+                imagesHTML += `
+                    <div class="mb-6">
+                        <h4 class="text-lg font-medium mb-2 text-gray-700">${file.replace('.png', '').replace('_', ' ')}</h4>
+                        <img src="/download/${file}" class="w-full rounded-lg shadow-lg" />
+                    </div>
+                `;
+            });
+            document.getElementById('results').innerHTML = `
+                <div class="bg-purple-50 rounded-lg p-6">
+                    <h3 class="text-xl font-semibold text-purple-800 mb-6">Visualizations</h3>
+                    ${imagesHTML}
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

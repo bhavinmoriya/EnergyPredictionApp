@@ -12,16 +12,23 @@ from typing import Optional
 from fastapi import UploadFile, File
 from fastapi.staticfiles import StaticFiles
 import shutil
+# import pickle
 
 app = FastAPI()
 
+# Load the pre-trained model at startup
+# with open("PJME_model.pkl", "rb") as f:
+#     model = pickle.load(f)
+model = xgb.XGBRegressor()
+model.load_model("PJME_model.ubj") 
+    
 # Mount static folder for HTML/JS/CSS
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Serve the HTML page
 @app.get("/")
 async def read_root():
-    return FileResponse("static/index.html")
+    return FileResponse("static/index_model.html")
 
 # Handle file upload
 @app.post("/upload")
@@ -49,7 +56,7 @@ def create_features(df: pl.DataFrame) -> pl.DataFrame:
     ])
 
 # --- Global variables for model and data ---
-model = None
+# model = None
 FEATURES = ['hour', 'dayofweek', 'quarter', 'month', 'year', 'dayofyear', 'dayofmonth', 'week']
 FEATURES += [f"lag_{i}" for i in [1, 2, 24, 48, 168]]
 TARGET = 'PJME_MW'
@@ -74,20 +81,25 @@ async def train_model():
     X_train = train.select(FEATURES).to_numpy()
     y_train = train.select(TARGET).to_numpy().flatten()
     X_val, y_val = val.select(FEATURES).to_numpy(), val.select(TARGET).to_numpy().flatten()
-    reg = xgb.XGBRegressor(
-        base_score=0.5,
-        booster='gbtree',
-        n_estimators=500,
-        early_stopping_rounds=50,
-        objective='reg:squarederror',
-        max_depth=3,
-        learning_rate=0.05,
-    )
-    reg.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_val, y_val)], verbose=100)
-    print("Training is finished :)")
-    model = reg
+    # reg = xgb.XGBRegressor(
+    #     base_score=0.5,
+    #     booster='gbtree',
+    #     n_estimators=500,
+    #     early_stopping_rounds=50,
+    #     objective='reg:squarederror',
+    #     max_depth=3,
+    #     learning_rate=0.05,
+    # )
+    # reg.fit(X_train, y_train, eval_set=[(X_train, y_train), (X_val, y_val)], verbose=100)
+    # print("Training is finished :)")
+    # model = reg
     return {"status": "Model trained successfully"}
 
+# @app.get("/predict")
+# def predict():
+#     # Use the pre-loaded model
+#     return {"prediction": model.predict(X_test).tolist()}
+    
 @app.get("/predict")
 async def predict():
     if model is None:
