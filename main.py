@@ -77,7 +77,7 @@ async def train_model():
     reg = xgb.XGBRegressor(
         base_score=0.5,
         booster='gbtree',
-        n_estimators=5000,
+        n_estimators=500,
         early_stopping_rounds=50,
         objective='reg:squarederror',
         max_depth=3,
